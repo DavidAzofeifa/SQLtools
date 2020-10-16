@@ -8,7 +8,12 @@ SELECT
 	[columns] = COUNT(DISTINCT c.column_id),
 	[sql] = CONCAT
 	(
-		'DROP STATISTICS ',
+		'IF EXISTS (SELECT * FROM sys.stats WHERE [name] = ''',
+		'stats_all_',
+		REPLACE(REPLACE(QUOTENAME(s.name), '[', ''), ']', ''),
+		'_',
+		REPLACE(REPLACE(QUOTENAME(t.name), '[', ''), ']', ''),
+		''') DROP STATISTICS ',
 		QUOTENAME(s.name),
 		'.',
 		QUOTENAME(t.name),
